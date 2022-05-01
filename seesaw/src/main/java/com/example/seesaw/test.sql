@@ -1,0 +1,1 @@
+delete from chat_message where id = '7'
