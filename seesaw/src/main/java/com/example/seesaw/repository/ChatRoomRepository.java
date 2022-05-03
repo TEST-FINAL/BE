@@ -1,6 +1,6 @@
 package com.example.seesaw.repository;
 
-import com.example.seesaw.domain.ChatRoom;
+import com.example.seesaw.model.ChatRoom;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -1,14 +1,10 @@
 package com.example.seesaw.redis;
 
 
-import com.example.seesaw.domain.ChatMessage;
 import com.example.seesaw.dto.ChatMessageDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.connection.Message;
-import org.springframework.data.redis.connection.MessageListener;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +25,7 @@ public class RedisSubscriber {
         try {
             // ChatMessage 객채로 맵핑
             ChatMessageDto chatMessageDto = objectMapper.readValue(publishMessage, ChatMessageDto.class);
-            // 채팅방을 구독한 클라이언트에게 메시지 발송(메인페이지 채팅방 번호 pid 필요?) roomId ??
+            // 채팅방을 구독한 클라이언트에게 메시지 발송(메인페이지 채팅방 번호 pid .. 필요 없을듯) roomId ??
             messagingTemplate.convertAndSend("/topic/greetings" + chatMessageDto.getStatus(), chatMessageDto);
         } catch (Exception e) {
             log.error("Exception {}", e);

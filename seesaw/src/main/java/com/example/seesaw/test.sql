@@ -1,1 +1,1 @@
-delete from chat_message where id = '7'
+delete from chat_message where id = '37'

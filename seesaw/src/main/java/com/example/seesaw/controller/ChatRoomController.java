@@ -3,11 +3,13 @@ package com.example.seesaw.controller;
 import com.example.seesaw.dto.ChatMessageResponseDto;
 import com.example.seesaw.service.ChatService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @CrossOrigin("*")
@@ -17,9 +19,10 @@ public class ChatRoomController {
 
     // 메인페이지 채널 채팅 내역 조회
     @GetMapping("/mainchat/get/main")
-    public List<ChatMessageResponseDto> getMainMessage() {
-//        List<ChatMessageResponseDto> chatMessagedResponseDtoList = chatService.getMainMessage();
-        return chatService.getMainMessage();
+    public ResponseEntity getMainChat() {
+
+        return ResponseEntity.ok()
+                .body(chatService.getMainChat());
     }
 
 }

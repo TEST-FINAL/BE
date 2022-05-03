@@ -1,4 +1,4 @@
-package com.example.seesaw.domain;
+package com.example.seesaw.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
