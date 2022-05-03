@@ -1,6 +1,6 @@
 package com.example.seesaw.controller;
 
-import com.example.seesaw.domain.ChatRoom;
+import com.example.seesaw.model.ChatRoom;
 import com.example.seesaw.dto.ChatMessageDto;
 import com.example.seesaw.repository.ChatRoomRepository;
 import com.example.seesaw.service.ChatService;
@@ -11,6 +11,8 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
+import java.time.LocalDateTime;
+
 @Slf4j
 @RequiredArgsConstructor
 @Controller
@@ -20,10 +22,10 @@ public class ChatController {
 
     @MessageMapping("/mainchat") // ../mainchat 이라는 api 메세지를 보내면 mainMessage 메소드가 호출. 목적지 /pub 으로 했으니 stompClient.send("/pub/mainchat")
     @SendTo("/topic/mainchat") // topic/mainchat   api 를 구독하고 있는 클라이언트들에게 mainMessage 된다.  subscribe("/topic/mainchat")
-    public ChatMessageDto mainMessage(ChatMessageDto chatMessageDto) throws Exception {
-//        log.info("채팅테스트:{}",chatMessageDto.getMessage());
+    public ChatMessageDto mainMessage(ChatMessageDto chatMessageDto, @Header("Authorization") String token) throws Exception {
+        log.info("채팅테스트:{}",chatMessageDto.getMessage());
 
-//        log.info("채팅 헤더 확인:{}",token);
+        log.info("채팅 헤더 확인:{}",token);
 
         Thread.sleep(100); // simulated delay
 
@@ -38,12 +40,14 @@ public class ChatController {
                     ()-> new IllegalArgumentException("에러!!")
             );
         }
-        //채팅 메시지 셋업 메소드  (token은 나중에)
-        chatService.chatSettingMethod(chatMessageDto, chatRoom);
+        // 시간까지 response
+        chatMessageDto.setCreatedAt(LocalDateTime.now());
+        //채팅 메시지 메소드
+        chatService.chatSave(chatMessageDto, token, chatRoom);
 
-        String destination = "mainchat";
-        log.info("=== channel : {}",destination);
-
+        String destination = "mainChat 확인용";
+        log.info("channel : {}",destination);
+        // 채팅 유저 수
 //        chatMessageDto.setUserCount(redisChatRepository.getUserCount(destination));
 
         return chatMessageDto;

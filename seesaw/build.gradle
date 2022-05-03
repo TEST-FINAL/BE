@@ -40,6 +40,22 @@ dependencies {
     implementation 'org.webjars:jquery:3.1.1-1'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+    // 스프링 시큐리티
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // JWT
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+    implementation 'commons-codec:commons-codec:1.5'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.11.2'
+    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+    implementation 'com.auth0:java-jwt:3.13.0'
+    implementation 'commons-io:commons-io:2.8.0'
+
+    // 소설 로그인
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+    //S3 연결 라이브러리
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-aws', version: '2.2.5.RELEASE'
 }
 
 tasks.named('test') {
