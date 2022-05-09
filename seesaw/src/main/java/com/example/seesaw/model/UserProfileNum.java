@@ -1,5 +1,6 @@
 package com.example.seesaw.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,22 +10,23 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
-public class ProfileImage extends Timestamped {
+public class UserProfileNum {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
 
-    @Column(columnDefinition = "TEXT")
-    private String imageUrls;
+    @ManyToOne
+    @JoinColumn(name = "USERPROFILE_ID")
+    private UserProfile userProfile;
 
-    //@JsonIgnore
-    @ManyToOne //(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
 
-    public ProfileImage(String imageUrls, User item){
-        this.imageUrls = imageUrls;
-        this.user = item;
+    public UserProfileNum(UserProfile userProfile, User user){
+        this.userProfile = userProfile;
+        this.user = user;
     }
 }

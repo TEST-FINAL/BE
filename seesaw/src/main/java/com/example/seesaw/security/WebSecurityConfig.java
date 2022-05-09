@@ -66,21 +66,30 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         web
                 .ignoring()
                 .antMatchers("/h2-console/**")
-                .antMatchers("/oauth/**");
+                .antMatchers("/oauth/**")
+                .antMatchers( // Swagger 문서용
+                        "/favicon.ico"
+                        ,"/error"
+                        ,"/swagger-ui/**"
+                        ,"/swagger-resources/**"
+                        ,"/v2/api-docs"
+                );
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.httpBasic().disable()
+        http.httpBasic()
+                .disable()
                 .csrf()
                 .disable()
-                .authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS).permitAll() // preflight 대응
-                .antMatchers("/oauth/**").permitAll(); // /auth/**에 대한 접근을 인증 절차 없이 허용(로그인 관련 url)
+                .headers()// 추가
+                .frameOptions().sameOrigin();// SockJS는 기본적으로 HTML iframe 요소를 통한 전송을 허용하지 않도록 설정되는데 해당 내용을 해제한다.
+//                .authorizeRequests()
+//                .antMatchers(HttpMethod.OPTIONS).permitAll() // preflight 대응
+//                .antMatchers("/oauth/**").permitAll(); // /auth/**에 대한 접근을 인증 절차 없이 허용(로그인 관련 url)
+
         // 특정 권한을 가진 사용자만 접근을 허용해야 할 경우, 하기 항목을 통해 가능
         //.antMatchers("/admin/**").hasAnyRole("ADMIN");
-
-
         http
                 .cors()
                 .and()
@@ -88,7 +97,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .disable()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.headers().frameOptions().disable();
+//        http.headers().frameOptions().disable();
 
         /* 1.
          * UsernamePasswordAuthenticationFilter 이전에 FormLoginFilter, JwtFilter 를 등록합니다.
@@ -155,6 +164,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("GET,/image/**");
         skipPathList.add("GET,/");
 
+        // 채팅 관리 허용 (소켓통신을 위해)
+        skipPathList.add("GET,/mainchat/**");
+        skipPathList.add("GET,/ws-seesaw/**");
+        skipPathList.add("POST,/ws-seesaw/**");
 
         FilterSkipMatcher matcher = new FilterSkipMatcher(
                 skipPathList,
@@ -184,7 +197,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.addExposedHeader("Authorization");
-
+        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

@@ -15,7 +15,7 @@ public class ChatRoom extends Timestamped {
     private Long chatRoomId; // 방 아이디
 
     @Column(nullable = false)
-    private String area; // 채팅창? 이거 잘 모르겠네
+    private String area; // 채팅창
 
     @Column
     private Long pid;

@@ -27,6 +27,9 @@ public final class JwtTokenUtils {
     public static final String CLAIM_USER_NAME = "USER_NAME";
     public static final String UID = "UID";
     public static final String NICKNAME = "NICKNAME";
+    public static final String GENERATION = "GENERATION";
+    public static final String MBTI = "MBTI";
+    public static final String CATEGORY = "CATEGORY";
     public static final String JWT_SECRET = "jwt_secret_!@#$%";
 
 
@@ -42,6 +45,8 @@ public final class JwtTokenUtils {
                     .withClaim(CLAIM_EXPIRED_DATE, new Date(System.currentTimeMillis() + JWT_TOKEN_VALID_MILLI_SEC))
                     .withClaim(UID, user.getId())
                     .withClaim(NICKNAME, user.getNickname())
+                    .withClaim(GENERATION, user.getGeneration())
+                    .withClaim(MBTI, user.getMbti())
                     .sign(generateAlgorithm());
             System.out.println("accessToken 생성 : "+ accessToken);
         } catch (Exception e) {

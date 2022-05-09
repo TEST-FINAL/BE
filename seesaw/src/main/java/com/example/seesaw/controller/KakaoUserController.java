@@ -1,9 +1,9 @@
 package com.example.seesaw.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.example.seesaw.dto.KakaoGenerationDto;
 import com.example.seesaw.security.UserDetailsImpl;
 import com.example.seesaw.service.KakaoUserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,9 +16,9 @@ import java.util.List;
 @RestController
 public class KakaoUserController {
     private final KakaoUserService kakaoUserService;
-    private final String ACCESS_TOKEN = "AccessToken";
-    private final String REFRESH_TOKEN = "RefreshToken";
-    private final String TOKEN_TYPE = "BEARER";
+    private final String ACCESS_TOKEN = "accessToken";
+    private final String REFRESH_TOKEN = "refreshToken";
+    private final String TOKEN_TYPE = "Bearer";
 
     //    @ApiOperation("카카오 로그인")
     @GetMapping("/user/kakao/callback")

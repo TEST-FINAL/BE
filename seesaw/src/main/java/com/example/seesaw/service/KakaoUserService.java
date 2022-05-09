@@ -1,8 +1,5 @@
 package com.example.seesaw.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.seesaw.dto.KakaoGenerationDto;
 import com.example.seesaw.dto.KakaoUserInfoDto;
 import com.example.seesaw.model.User;
@@ -11,6 +8,9 @@ import com.example.seesaw.repository.UserRepository;
 import com.example.seesaw.security.UserDetailsImpl;
 import com.example.seesaw.security.UserDetailsServiceImpl;
 import com.example.seesaw.security.jwt.JwtTokenUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -107,22 +107,17 @@ public class KakaoUserService {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
         Long id = jsonNode.get("id").asLong();
-        String nickname = jsonNode.get("properties")
-                .get("nickname").asText();
+//        String nickname = jsonNode.get("properties")
+//                .get("nickname").asText();
         String email = jsonNode.get("kakao_account")
                 .get("email").asText();
-//        String age = jsonNode.get("kakao_account")
-//                .get("age_range").asText();
-                //.get("birthyear").asText();
 
-        return new KakaoUserInfoDto(id, nickname, email);
+        return new KakaoUserInfoDto(id, email);
     }
 
     private User registerKakaoUserIfNeeded(KakaoUserInfoDto kakaoUserInfo) {
         // DB 에 중복된 Kakao Id 가 있는지 확인
         Long kakaoId = kakaoUserInfo.getId();
-        // 카카오 아이디를 String으로 변환하여 username으로 db에 저장
-//        String kakaoUsername = Long.toString(kakaoUserInfo.getId());
         String kakaoUsername = kakaoUserInfo.getEmail();
 
         System.out.println("input kakaoEmail : " +kakaoUsername);
@@ -131,17 +126,13 @@ public class KakaoUserService {
                 .orElse(null);
         if (kakaoUser == null) {
             // 회원가입
-            // nickname: kakao nickname
-            String kakaoNickname = kakaoUserInfo.getNickname();
-
-            System.out.println("kakaoNickname : " + kakaoNickname);
 
             // password: random UUID
             String password = UUID.randomUUID().toString();
             String encodedPassword = passwordEncoder.encode(password);
 
 
-            kakaoUser = new User(kakaoUsername, kakaoNickname, encodedPassword, null, 0L, UserRoleEnum.USER, kakaoId);
+            kakaoUser = new User(kakaoUsername, encodedPassword, 0L, UserRoleEnum.USER, kakaoId);
             userRepository.save(kakaoUser);
         }
         return kakaoUser;
