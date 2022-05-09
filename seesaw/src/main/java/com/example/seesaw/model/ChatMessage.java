@@ -15,8 +15,8 @@ public class ChatMessage extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long userId;
+//    @Column(nullable = false)
+//    private Long userId;
 
     @Column
     private String senderName;
@@ -29,7 +29,7 @@ public class ChatMessage extends Timestamped {
     private ChatRoom chatRoom;
 
     public ChatMessage(ChatMessageDto chatMessageDto, ChatRoom chatRoom) {
-        this.userId = chatMessageDto.getUserId();
+//        this.userId = chatMessageDto.getUserId();
         this.message = chatMessageDto.getMessage();
         this.senderName = chatMessageDto.getSenderName();
         this.chatRoom = chatRoom;

@@ -16,9 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 public class FormLoginFilter extends UsernamePasswordAuthenticationFilter {
     final private ObjectMapper objectMapper;
 
-    //@Autowired
-    //private UserDetailsServiceImpl userDetailsServiceImpl;
-
     public FormLoginFilter(final AuthenticationManager authenticationManager) {
         super.setAuthenticationManager(authenticationManager);
         objectMapper = new ObjectMapper()

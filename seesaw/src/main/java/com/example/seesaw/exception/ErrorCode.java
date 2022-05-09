@@ -20,6 +20,7 @@ public enum ErrorCode {
     NOT_EQUAL_USER_PW(HttpStatus.BAD_REQUEST, "400_11", "비밀번호를 확인해주세요."),
     DUPLICATED_USER_NAME(HttpStatus.BAD_REQUEST, "400_9", "유저아이디가 이미 존재합니다."),
     DUPLICATED_USER_NICKNAME(HttpStatus.BAD_REQUEST, "400_10", "유저닉네임이 이미 존재합니다."),
+    BLANK_USER_MBTI(HttpStatus.BAD_REQUEST, "400_11", "MBTI 전부 체크해주세요. null이 있습니다."),
 
     // 404 Not Found
     NOT_FOUND_USER_ID(HttpStatus.NOT_FOUND, "404_1", "유저 아이디가 존재하지 않습니다."),
