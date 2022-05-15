@@ -1,6 +1,6 @@
 package com.example.seesaw.model;
 
-import com.example.seesaw.dto.TroubleRequestDto;
+import com.example.seesaw.dto.TroubleDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +15,7 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 public class Trouble extends Timestamped {
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
@@ -23,7 +24,7 @@ public class Trouble extends Timestamped {
     private String title;
 
     @Column(nullable = false)
-    private String content;
+    private String contents;
 
     @Column(nullable = false)
     private String question;
@@ -32,10 +33,10 @@ public class Trouble extends Timestamped {
     private String answer;
 
     @Column
-    private Long viewCount;
+    private Long views;
 
     @OneToMany(mappedBy = "trouble", cascade = CascadeType.REMOVE)
-    private List<TroubleImage> imageUrls;
+    private List<TroubleImage> troubleImages;
 
     @OneToMany(mappedBy = "trouble", cascade = CascadeType.REMOVE)
     private List<TroubleTag> troubleTags;
@@ -44,19 +45,21 @@ public class Trouble extends Timestamped {
     @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
 
-    public Trouble(String title, String content, String question, String answer, Long viewCount, User user){
+
+    public Trouble(String title, String contents, String question, String answer, Long views, User user){
         this.title = title;
-        this.content = content;
+        this.contents = contents;
         this.question = question;
         this.answer = answer;
-        this.viewCount = viewCount;
+        this.views = views;
         this.user = user;
     }
 
-    public void update(TroubleRequestDto troubleRequestDto) {
-        this.title = troubleRequestDto.getTitle();
-        this.content = troubleRequestDto.getContents();
-        this.question = troubleRequestDto.getQuestion();
-        this.answer = troubleRequestDto.getAnswer();
+
+    public void update(TroubleDto troubleDto) {
+        this.title = troubleDto.getTitle();
+        this.contents = troubleDto.getContents();
+        this.question = troubleDto.getQuestion();
+        this.answer = troubleDto.getAnswer();
     }
 }

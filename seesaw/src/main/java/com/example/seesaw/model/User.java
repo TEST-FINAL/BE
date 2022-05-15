@@ -59,6 +59,7 @@ public class User {
         this.kakaoId = null;
     }
 
+
     public User(String username, String enPassword, Long postCount, UserRoleEnum role, Long kakaoId) {
         this.username = username;
         this.pwd = enPassword;
@@ -66,6 +67,7 @@ public class User {
         this.role = role;
         this.kakaoId = kakaoId;
     }
+
 
     public User(List<UserProfileNum> userProfileNum){
         this.userProfileNum = userProfileNum;

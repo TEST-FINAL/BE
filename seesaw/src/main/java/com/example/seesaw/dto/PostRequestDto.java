@@ -15,6 +15,7 @@ public class PostRequestDto {
     private String title;
     private String contents;
     private String videoUrl;
+    private String generation;
     private List<String> tagNames;
     private List<String> postImages;
 

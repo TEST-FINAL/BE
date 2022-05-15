@@ -12,6 +12,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProfileRequestDto {
+
     private String nickname;
-    private List<Long> profileImages;
+    private List<Long> profileImages;       // 캐릭터 Ids
+
 }

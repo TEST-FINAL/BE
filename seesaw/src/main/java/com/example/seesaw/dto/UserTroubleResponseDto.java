@@ -13,6 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserTroubleResponseDto {
+
     private Long troubleCount;
     private List<Trouble> troubleList;
+
 }

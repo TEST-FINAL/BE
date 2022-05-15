@@ -13,6 +13,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 public class UserProfileNum {
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
@@ -24,6 +25,7 @@ public class UserProfileNum {
     @ManyToOne
     @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
+
 
     public UserProfileNum(UserProfile userProfile, User user){
         this.userProfile = userProfile;

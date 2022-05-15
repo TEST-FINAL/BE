@@ -10,6 +10,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProfileListDto {
+
     private Long charId;
-    private String Url;
+    private String profileImage;     // Url -> profileImage
+
 }

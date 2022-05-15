@@ -148,27 +148,8 @@ public class UserService {
 
     @Transactional
     public UserInfoResponseDto findUserInfo(User user) {
+        List<ProfileListDto> profileListDtos = findUserProfiles(user);
 
-        List<UserProfileNum> userProfileNums = userProfileNumRepository.findAllByUserId(user.getId());
-        if(userProfileNums.isEmpty()){
-            throw new IllegalArgumentException("저장된 userProfileId 가 없습니다.");
-        }
-
-        List<ProfileListDto> profileListDtos = new ArrayList<>();
-        for(UserProfileNum num : userProfileNums){
-            UserProfile userProfile = userProfileRepository.findById(num.getUserProfile().getId()).orElseThrow(
-                    () -> new IllegalArgumentException("해당하는 userProfile 이 없습니다."));
-            if (userProfile.getCategory().equals("faceUrl")){
-                ProfileListDto faceUrl = new ProfileListDto(userProfile.getCharId(), userProfile.getImageUrl());
-                profileListDtos.add(faceUrl);
-            } else if(userProfile.getCategory().equals("accessoryUrl")){
-                ProfileListDto accessoryUrl = new ProfileListDto(userProfile.getCharId(), userProfile.getImageUrl());
-                profileListDtos.add(accessoryUrl);
-            } else if(userProfile.getCategory().equals("backgroundUrl")){
-                ProfileListDto backgroundUrl = new ProfileListDto(userProfile.getCharId(), userProfile.getImageUrl());
-                profileListDtos.add(backgroundUrl);
-            }
-        }
         return new UserInfoResponseDto(user.getUsername(), user.getNickname(), profileListDtos);
     }
 
@@ -182,6 +163,32 @@ public class UserService {
 
         //비밀번호 유효성 검사
         checkUserPw(pwd, pwdCheck);
+    }
+
+    public List<ProfileListDto> findUserProfiles(User user){
+
+        List<UserProfileNum> userProfileNums = userProfileNumRepository.findAllByUserId(user.getId());
+        System.out.println("userId   "+ user.getId());
+        if(userProfileNums.isEmpty()){
+            throw new IllegalArgumentException("저장된 userProfileId 가 없습니다.");
+        }
+
+        List<ProfileListDto> profileListDtos = new ArrayList<>();
+        for(UserProfileNum num : userProfileNums){
+            UserProfile userProfile = userProfileRepository.findById(num.getUserProfile().getId()).orElseThrow(
+                    () -> new IllegalArgumentException("해당하는 userProfile 이 없습니다."));
+            if (userProfile.getCategory().equals("faceUrl")){
+                ProfileListDto faceUrl = new ProfileListDto(userProfile.getCharId(), userProfile.getUserProfileImage());
+                profileListDtos.add(faceUrl);
+            } else if(userProfile.getCategory().equals("accessoryUrl")){
+                ProfileListDto accessoryUrl = new ProfileListDto(userProfile.getCharId(), userProfile.getUserProfileImage());
+                profileListDtos.add(accessoryUrl);
+            } else if(userProfile.getCategory().equals("backgroundUrl")){
+                ProfileListDto backgroundUrl = new ProfileListDto(userProfile.getCharId(), userProfile.getUserProfileImage());
+                profileListDtos.add(backgroundUrl);
+            }
+        }
+        return profileListDtos;
     }
 }
 

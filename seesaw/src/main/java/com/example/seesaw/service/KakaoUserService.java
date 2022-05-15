@@ -1,16 +1,16 @@
 package com.example.seesaw.service;
 
 import com.example.seesaw.dto.KakaoGenerationDto;
-import com.example.seesaw.dto.KakaoUserInfoDto;
-import com.example.seesaw.model.User;
-import com.example.seesaw.model.UserRoleEnum;
-import com.example.seesaw.repository.UserRepository;
 import com.example.seesaw.security.UserDetailsImpl;
 import com.example.seesaw.security.UserDetailsServiceImpl;
 import com.example.seesaw.security.jwt.JwtTokenUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.seesaw.dto.KakaoUserInfoDto;
+import com.example.seesaw.model.User;
+import com.example.seesaw.model.UserRoleEnum;
+import com.example.seesaw.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -40,6 +40,7 @@ public class KakaoUserService {
     private final UserDetailsServiceImpl userDetailsServiceImpl;
 
     public List<String> kakaoLogin(String code) throws JsonProcessingException {
+
         // 1. "인가 코드"로 "액세스 토큰" 요청
         String accessToken = getAccessToken(code);
 
@@ -57,6 +58,7 @@ public class KakaoUserService {
     }
 
     private String getAccessToken(String code) throws JsonProcessingException {
+
         // HTTP Header 생성
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
@@ -64,6 +66,7 @@ public class KakaoUserService {
         // HTTP Body 생성
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
+
         // 클라이언트 아이디, url 확인
         body.add("client_id", "6f05e336898a8b021c45ac7c1f8770b8");
         body.add("redirect_uri", "http://localhost:3000/user/kakao/callback");
@@ -88,6 +91,7 @@ public class KakaoUserService {
     }
 
     private KakaoUserInfoDto getKakaoUserInfo(String accessToken) throws JsonProcessingException {
+
         // HTTP Header 생성
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
@@ -107,8 +111,8 @@ public class KakaoUserService {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
         Long id = jsonNode.get("id").asLong();
-//        String nickname = jsonNode.get("properties")
-//                .get("nickname").asText();
+//      String nickname = jsonNode.get("properties")
+//      .get("nickname").asText();
         String email = jsonNode.get("kakao_account")
                 .get("email").asText();
 
@@ -116,6 +120,7 @@ public class KakaoUserService {
     }
 
     private User registerKakaoUserIfNeeded(KakaoUserInfoDto kakaoUserInfo) {
+
         // DB 에 중복된 Kakao Id 가 있는지 확인
         Long kakaoId = kakaoUserInfo.getId();
         String kakaoUsername = kakaoUserInfo.getEmail();

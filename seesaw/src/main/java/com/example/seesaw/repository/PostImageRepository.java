@@ -12,7 +12,7 @@ public interface PostImageRepository extends JpaRepository<PostImage, Long> {
     void deleteAllByPostId(Long postId);
 
     @Transactional
-    void deleteByImageUrl(String lastImage);
+    void deleteByPostImage(String postImage);
 
     List<PostImage> findAllByPostId(Long postId);
 }

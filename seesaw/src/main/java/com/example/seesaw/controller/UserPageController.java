@@ -8,7 +8,6 @@ import com.example.seesaw.security.UserDetailsImpl;
 import com.example.seesaw.service.TroubleService;
 import com.example.seesaw.service.UserPageService;
 import com.example.seesaw.service.UserService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

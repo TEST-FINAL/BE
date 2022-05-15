@@ -14,12 +14,13 @@ import javax.persistence.*;
 @Entity
 @AllArgsConstructor
 public class TroubleImage {
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
 
     @Column(nullable = false)
-    private String troubleImageUrl;
+    private String troubleImage;
 
     @ManyToOne
     @JoinColumn(name = "USER_ID", nullable = false)
@@ -29,8 +30,8 @@ public class TroubleImage {
     @JoinColumn(name = "TROUBLE_ID", nullable = false)
     private Trouble trouble;
 
-    public TroubleImage(String troubleImageUrl, User user, Trouble trouble){
-        this.troubleImageUrl = troubleImageUrl;
+    public TroubleImage(String troubleImage, User user, Trouble trouble){
+        this.troubleImage = troubleImage;
         this.user = user;
         this.trouble = trouble;
 
