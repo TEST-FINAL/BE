@@ -11,19 +11,21 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class MyScrapResponseDto {
-    private Long scrapId; // 스크랩 id
-    private String title; // 제목
-    private int views; // 조회수
-    private int scrapCount; // 스크랩 횟수
-    private int commentCount; // 댓글 개수
-    private String mainImage; // 메인 이미지
 
-    public MyScrapResponseDto(PostScrap postScrap, Post post, int scrapCount, PostImage postImage){
+    private Long scrapId;           // 스크랩 id
+    private String title;           // 제목
+    private Long views;              // 조회수
+    private Long scrapCount;         // 스크랩 횟수
+    private Long commentCount;       // 댓글 개수
+    private String mainImage;       // 메인 이미지
+
+    public MyScrapResponseDto(PostScrap postScrap, Post post, Long scrapCount, Long commentCount, PostImage postImage){
         this.scrapId = postScrap.getId();
         this.title = post.getTitle();
-//        this.views = post.getViews();   // 아직 테이블에 없음
+        this.views = post.getViews();
         this.scrapCount = scrapCount;
-//        this.commentCount = post.getCommentCount(); // 아직 테이블
-        this.mainImage = postImage.getImageUrl();
+        this.commentCount = commentCount;
+        this.mainImage = postImage.getPostImage();
     }
+
 }

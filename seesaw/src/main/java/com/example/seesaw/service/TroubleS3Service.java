@@ -84,12 +84,12 @@ public class TroubleS3Service {
     }
 
     //기존 s3에 있는 기존 이미지 정보, DB 정보 삭제
-    public void delete(Long troubleId, List<String> imageUrls) {
+    public void delete(Long troubleId, List<String> imageUrls) {   //imageUrls 는 지우면 안되는 것들
         List<TroubleImage> savedImages = troubleImageRepository.findAllByTroubleId(troubleId);
 
         List<String> lastImages = new ArrayList<>();
         for (TroubleImage savedImage: savedImages){
-            lastImages.add(savedImage.getTroubleImageUrl());
+            lastImages.add(savedImage.getTroubleImage());
         }
         if(imageUrls != null){
             lastImages.removeAll(imageUrls);
@@ -97,7 +97,7 @@ public class TroubleS3Service {
 
         for (String lastImage : lastImages) {
             if (!lastImage.equals("")) {
-                String image = lastImage.replace("https://.s3.ap-northeast-2.amazonaws.com/", "");
+                String image = lastImage.replace("https://myseesaw.s3.ap-northeast-2.amazonaws.com/", "");
                 boolean isExistObject = s3Client.doesObjectExist(bucket, image);
                 System.out.println("지워야할 url 주소 : " + image);
                 System.out.println("앞에 지운 url 주소 : " + image);
@@ -107,7 +107,7 @@ public class TroubleS3Service {
                 }
             }
             System.out.println(lastImage);
-            troubleImageRepository.deleteByTroubleImageUrl(lastImage);
+            troubleImageRepository.deleteByTroubleImage(lastImage);
         }
     }
 

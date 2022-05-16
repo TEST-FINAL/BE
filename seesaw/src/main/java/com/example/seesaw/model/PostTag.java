@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class PostTag {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
@@ -24,6 +24,7 @@ public class PostTag {
     @ManyToOne //(fetch = FetchType.LAZY)
     @JoinColumn(name = "postid", nullable = false)
     private Post post;
+
 
     public PostTag(String tagName, Post post){
         this.tagName = tagName;

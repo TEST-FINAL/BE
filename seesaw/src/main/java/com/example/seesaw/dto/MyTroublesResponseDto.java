@@ -9,11 +9,14 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class MyTroublesResponseDto {
+
     private Long troubleId;
     private String title;
+
 
     public MyTroublesResponseDto(Trouble trouble){
         this.troubleId = trouble.getId();
         this.title = trouble.getTitle();
     }
+
 }

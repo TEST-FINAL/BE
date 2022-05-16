@@ -17,30 +17,32 @@ public class UserPageService {
     private final UserRepository userRepository;
     private final UserProfileRepository userProfileRepository;
     private final UserProfileNumRepository userProfileNumRepository;
-    private final ScrapRepository scrapRepository;
+    private final TroubleCommentRepository troubleCommentRepository;
+
+    private final PostScrapRepository postScrapRepository;
     private final PostRepository postRepository;
     private final PostImageRepository postImageRepository;
+    private final PostCommentRepository postCommentRepository;
     private final TroubleRepository troubleRepository;
 
-    //    public void checkProfile(ProfileRequestDto profileRequestDto) {
-//        //닉네임 유효성 검사
-//        checkNickName(profileRequestDto.getNickname());
-//        //IDs 유효성 검사
-//        List<Long> profileImageNums = profileRequestDto.getProfileImages();
-//        for(Long num : profileImageNums){
-//            userProfileRepository.findById(num).orElseThrow(
-//                    () -> new IllegalArgumentException("해당하는 이미지가 없습니다.")
-//            );
-//            //UserProfileNum userProfileNum = new UserProfileNum(userProfile, user);
-//            //userProfileNumRepository.save(userProfileNum);
-//        }
-//    }
     // 프로필 수정
     public void updateProfile(ProfileRequestDto profileRequestDto, User user) {
         //닉네임 유효성 검사 후 저장
         String nickname = userService.checkNickName(profileRequestDto.getNickname());
+        //고민댓글 nickname 변경
+        List<TroubleComment> troubleComments = troubleCommentRepository.findAllByNickname(user.getNickname());
+        for (TroubleComment troubleComment : troubleComments) {
+            troubleComment.setNickname(profileRequestDto.getNickname());
+            troubleCommentRepository.save(troubleComment);
+        }
+        List<PostComment> postComments = postCommentRepository.findAllByNickname(user.getNickname());
+        for(PostComment postComment:postComments){
+            postComment.setNickname(profileRequestDto.getNickname());
+            postCommentRepository.save(postComment);
+        }
         user.setNickname(nickname);
         userRepository.save(user);
+
         //IDs 유효성 검사 후 IDs 저장
         List<Long> profileImageCharIds = profileRequestDto.getProfileImages();
         List<UserProfileNum> userProfileNums = new ArrayList<>();
@@ -60,11 +62,11 @@ public class UserPageService {
         List<UserProfile> userProfile = userProfileRepository.findAll();
         for (UserProfile profile : userProfile) {
             if (profile.getCategory().equals("faceUrl")) {
-                faceUrl.add(new ProfileListDto(profile.getCharId(), profile.getImageUrl()));
+                faceUrl.add(new ProfileListDto(profile.getCharId(), profile.getUserProfileImage()));
             } else if (profile.getCategory().equals("accessoryUrl")) {
-                accessoryUrl.add(new ProfileListDto(profile.getCharId(), profile.getImageUrl()));
+                accessoryUrl.add(new ProfileListDto(profile.getCharId(), profile.getUserProfileImage()));
             } else if (profile.getCategory().equals("backgroundUrl")) {
-                backgroudUrl.add(new ProfileListDto(profile.getCharId(), profile.getImageUrl()));
+                backgroudUrl.add(new ProfileListDto(profile.getCharId(), profile.getUserProfileImage()));
             }
         }
         return new ProfileResponseDto(faceUrl, accessoryUrl, backgroudUrl);
@@ -72,7 +74,7 @@ public class UserPageService {
 
     // 내가 스크랩한 게시물 조회 (마이페이지)
     public List<MyScrapResponseDto> getMyScraps(User user) {
-        List<PostScrap> postScraps = scrapRepository.findAllByUserId(user.getId());
+        List<PostScrap> postScraps = postScrapRepository.findAllByUserId(user.getId());
         List<Post> posts = postRepository.findAll();
 
         List<MyScrapResponseDto> myScrapResponseDtos = new ArrayList<>();
@@ -80,29 +82,32 @@ public class UserPageService {
         for (PostScrap postScrap : postScraps) {
             for (Post post : posts) {
                 // postScrap테이블 postId 와 post테이불 postId가 일치할때
-                if (post.getId().equals(postScrap.getPost().getId())){
+                if (post.getId().equals(postScrap.getPost().getId())) {
                     // postId에 해당하는 postImage 가져오기
                     List<PostImage> postImages = postImageRepository.findAllByPostId(post.getId());
                     // 첫번째 이미지만 가져오기
                     PostImage postImage = postImages.get(0);
                     // 일치한 postId에 해당하는 scrap 횟수만 가져오기
-                    List<PostScrap> scraps = scrapRepository.findAllByPostId(post.getId());
-                    myScrapResponseDtos.add(new MyScrapResponseDto(postScrap, post, scraps.size(), postImage));
+                    long scrapCount = postScrapRepository.countByPostId(post.getId());
+                    // 일치한 postId 에 해당하는 comment 개수만 가져오기
+                    long commentCount = postCommentRepository.countByPostId(post.getId());
+                    myScrapResponseDtos.add(new MyScrapResponseDto(postScrap, post, scrapCount,
+                            commentCount, postImage));
                 }
+
             }
         }
         return myScrapResponseDtos;
     }
 
     // 내가 등록한 고민글 조회 (마이페이지)
-    public List<MyTroublesResponseDto> getMyTroubles(User user){
+    public List<MyTroublesResponseDto> getMyTroubles(User user) {
         List<Trouble> troubles = troubleRepository.findAllByUserId(user.getId());
 
         List<MyTroublesResponseDto> myTroublesResponseDtos = new ArrayList<>();
-        for (Trouble trouble: troubles){
+        for (Trouble trouble : troubles) {
             myTroublesResponseDtos.add(new MyTroublesResponseDto(trouble));
         }
-
         return myTroublesResponseDtos;
     }
 }

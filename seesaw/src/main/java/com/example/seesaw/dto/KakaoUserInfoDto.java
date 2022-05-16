@@ -10,6 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class KakaoUserInfoDto {
+
     private Long id;
     private String email;
 }

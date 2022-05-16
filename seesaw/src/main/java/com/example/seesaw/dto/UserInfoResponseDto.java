@@ -12,7 +12,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserInfoResponseDto {
+
     private String username;
     private String nickname;
     private List<ProfileListDto> ProfileImages;
+
 }

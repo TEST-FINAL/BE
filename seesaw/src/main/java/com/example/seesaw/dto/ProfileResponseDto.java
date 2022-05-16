@@ -12,7 +12,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProfileResponseDto {
+
     private List<ProfileListDto> faceUrl;
     private List<ProfileListDto> accessoryUrl;
     private List<ProfileListDto> backgroundUrl;
+
 }

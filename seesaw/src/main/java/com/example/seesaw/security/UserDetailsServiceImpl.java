@@ -1,10 +1,10 @@
 package com.example.seesaw.security;
 
 import com.example.seesaw.model.RefreshToken;
-import com.example.seesaw.model.User;
 import com.example.seesaw.repository.RefreshTokenRepository;
-import com.example.seesaw.repository.UserRepository;
 import com.example.seesaw.security.jwt.JwtTokenUtils;
+import com.example.seesaw.model.User;
+import com.example.seesaw.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

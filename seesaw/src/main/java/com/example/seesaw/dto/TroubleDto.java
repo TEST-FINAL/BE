@@ -11,11 +11,13 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class TroubleRequestDto {
+public class TroubleDto {
+
     private String title;
     private String contents;
     private String question;
     private String answer;
-    private List<String> tagName;
-    private List<String> imageUrls;
+    private List<String> tagNames;           // tagName -> tagNames
+    private List<String> troubleImages;      // imageUrls -> troubleImages
+
 }

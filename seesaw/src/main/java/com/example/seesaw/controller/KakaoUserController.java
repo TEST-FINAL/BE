@@ -2,8 +2,8 @@ package com.example.seesaw.controller;
 
 import com.example.seesaw.dto.KakaoGenerationDto;
 import com.example.seesaw.security.UserDetailsImpl;
-import com.example.seesaw.service.KakaoUserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.example.seesaw.service.KakaoUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

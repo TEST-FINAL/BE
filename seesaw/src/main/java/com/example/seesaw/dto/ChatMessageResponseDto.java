@@ -11,9 +11,11 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 public class ChatMessageResponseDto {
+
     private String senderName;
     private String message;
     private LocalDateTime createdAt;
+
 
     public ChatMessageResponseDto (ChatMessage chatMessage) {
         this.senderName = chatMessage.getSenderName();

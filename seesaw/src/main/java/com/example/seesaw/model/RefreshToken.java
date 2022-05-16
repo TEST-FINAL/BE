@@ -11,6 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 public class RefreshToken {
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
@@ -21,4 +22,5 @@ public class RefreshToken {
     @ManyToOne
     @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
+
 }

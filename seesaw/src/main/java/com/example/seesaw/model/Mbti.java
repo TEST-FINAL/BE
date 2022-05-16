@@ -15,6 +15,7 @@ import javax.persistence.Id;
 @Entity
 @AllArgsConstructor
 public class Mbti {
+
     @Id
     @Column(nullable = false, unique = true)
     private Long id;

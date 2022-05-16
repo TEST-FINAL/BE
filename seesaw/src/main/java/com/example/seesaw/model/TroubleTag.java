@@ -14,6 +14,7 @@ import javax.persistence.*;
 @Entity
 @AllArgsConstructor
 public class TroubleTag {
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;

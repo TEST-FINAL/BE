@@ -7,9 +7,13 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 public interface TroubleImageRepository extends JpaRepository<TroubleImage, Long> {
+
     @Transactional
-    void deleteByTroubleImageUrl(String lastImageUrl);
+    void deleteByTroubleImage(String lastImage);
+
     List<TroubleImage> findAllByTroubleId(Long troubleId);
+
     @Transactional
     void deleteAllByTroubleId(Long troubleId);
+
 }
