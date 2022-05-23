@@ -27,7 +27,7 @@ public class PostDetailResponseDto {
     private List<String> tagNames;
     private List<String> postImages;
     private List<ProfileListDto> profileImages;
-    private List<PostCommentRequestDto> postComments;
+    private List<PostCommentDto> postComments;
 
 
     public PostDetailResponseDto(PostResponseDto responseDto) {

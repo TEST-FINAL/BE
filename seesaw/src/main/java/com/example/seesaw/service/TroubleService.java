@@ -1,9 +1,15 @@
 package com.example.seesaw.service;
 
-import com.example.seesaw.dto.*;
+import com.example.seesaw.dto.TroubleAllResponseDto;
+import com.example.seesaw.dto.TroubleCommentRequestDto;
+import com.example.seesaw.dto.TroubleDetailResponseDto;
+import com.example.seesaw.dto.TroubleDto;
 import com.example.seesaw.model.*;
 import com.example.seesaw.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,6 +25,8 @@ public class TroubleService {
     private final TroubleImageRepository troubleImageRepository;
     private final TroubleS3Service troubleS3Service;
     private final TroubleCommentRepository troubleCommentRepository;
+    private final TroubleCommentLikeRepository troubleCommentLikeRepository;
+
     private final ConvertTimeService convertTimeService;
     private final UserService userService;
     private final UserRepository userRepository;
@@ -29,7 +37,7 @@ public class TroubleService {
         List<String> imagePaths = new ArrayList<>();
 
         if(files == null){
-            imagePaths.add("https://myseesaw.s3.ap-northeast-2.amazonaws.com/ddddd23sdfasf.jpg");
+            imagePaths.add("https://myseesaw.s3.ap-northeast-2.amazonaws.com/TroubleBaicCard.svg");
         } else {
             imagePaths.addAll(troubleS3Service.upload(files));
         }
@@ -66,9 +74,9 @@ public class TroubleService {
 
         List<TroubleTag> troubleTags = troubleTagRepository.findAllByTroubleId(troubleId);
 
-        List<String> gomiTagList = new ArrayList<>();
+        List<String> troubleTagList = new ArrayList<>();
         for(TroubleTag troubleTag : troubleTags){
-            gomiTagList.add(troubleTag.getTagName());
+            troubleTagList.add(troubleTag.getTagName());
         }
 
         List<TroubleImage> troubleImages = troubleImageRepository.findAllByTroubleId(troubleId);
@@ -77,10 +85,14 @@ public class TroubleService {
         }
         List<String> troubleImageList = new ArrayList<>();
         for(TroubleImage troubleImage : troubleImages){
-            troubleImageList.add(troubleImage.getTroubleImage());
+            if(troubleImage.getTroubleImage().equals("https://myseesaw.s3.ap-northeast-2.amazonaws.com/TroubleBaicCard.svg")){
+                break;
+            } else {
+                troubleImageList.add(troubleImage.getTroubleImage());
+            }
         }
 
-        return new TroubleDto(trouble.getTitle(), trouble.getContents(), trouble.getQuestion(), trouble.getAnswer(), gomiTagList, troubleImageList);
+        return new TroubleDto(trouble.getTitle(), trouble.getContents(), trouble.getQuestion(), trouble.getAnswer(), troubleTagList, troubleImageList);
     }
 
     //고민글 수정
@@ -137,29 +149,37 @@ public class TroubleService {
         }
     }
 
-    public TroubleDetailResponseDto findDetailTrouble(Long troubleId) {
+    // 고민 상세보기
+    public TroubleDetailResponseDto findDetailTrouble(Long troubleId, int page, User user1) {
         Trouble trouble = troubleRepository.findById(troubleId).orElseThrow(
                 () -> new IllegalArgumentException("고민 Id에 해당하는 글이 없습니다.")
         );
         TroubleDto troubleDto = findTrouble(troubleId);
 
-        TroubleDetailResponseDto troubleDetailResponseDto = new TroubleDetailResponseDto(troubleDto);
-        troubleDetailResponseDto.setNickname(trouble.getUser().getNickname());
-        troubleDetailResponseDto.setProfileImages(userService.findUserProfiles(trouble.getUser()));
-        String postTime = convertTimeService.convertLocaldatetimeToTime(trouble.getCreatedAt());
-        troubleDetailResponseDto.setPostTime(postTime);
-        troubleDetailResponseDto.setViews(trouble.getViews());
-        trouble.setViews(trouble.getViews()+1);
-        troubleRepository.save(trouble);
+        TroubleDetailResponseDto troubleDetailResponseDto = getTroubleDetailResponseDto(trouble, troubleDto, user1);
 
-        List<TroubleComment> troubleComments = troubleCommentRepository.findAllByTroubleIdOrderByLikeCountDesc(troubleId);
+        Pageable pageable = PageRequest.of(page-1, 4);
+        Page<TroubleComment> troubleCommentPage = troubleCommentRepository.findAllByTroubleIdOrderByCreatedAtDesc(troubleId, pageable);
+
+        List<TroubleComment> troubleComments = troubleCommentRepository.findAllByTroubleId(troubleId);
         troubleDetailResponseDto.setCommentCount((long) troubleComments.size());
+
         List<TroubleCommentRequestDto> troubleCommentRequestDtos = new ArrayList<>();
-        for(TroubleComment troubleComment:troubleComments){
+        for(TroubleComment troubleComment:troubleCommentPage){
             TroubleCommentRequestDto troubleCommentRequestDto = new TroubleCommentRequestDto(troubleComment);
             User user = userRepository.findByNickname(troubleComment.getNickname()).orElseThrow(
                     () -> new IllegalArgumentException("고민댓글에 해당하는 사용자를 찾을 수 없습니다."));
+            // commentTime
+            String postCommentTime = convertTimeService.convertLocaldatetimeToTime(troubleComment.getCreatedAt());
+            troubleCommentRequestDto.setCommentTime(postCommentTime);
+            // commentLikeCount
+            troubleCommentRequestDto.setCommentLikeCount(troubleComment.getLikeCount());
+            // 현재 로그인한 사람의 댓글 좋아요 상태
+            TroubleCommentLike savedPostCommentLike = troubleCommentLikeRepository.findByTroubleCommentAndUserId(troubleComment, user1.getId());
+            troubleCommentRequestDto.setCommentLikeStatus(savedPostCommentLike != null); // status
+            // 프로필이미지
             troubleCommentRequestDto.setProfileImages(userService.findUserProfiles(user));
+            // 리스트에 넣기
             troubleCommentRequestDtos.add(troubleCommentRequestDto);
         }
         troubleDetailResponseDto.setTroubleComments(troubleCommentRequestDtos);
@@ -167,16 +187,38 @@ public class TroubleService {
         return troubleDetailResponseDto;
     }
 
-    public List<TroubleAllResponseDto> findAllTroubles() {
-        List<Trouble> troubles = troubleRepository.findAllByOrderByCreatedAtDesc();
+    // 고민글 상세조회 중복 메서드 추출
+    private TroubleDetailResponseDto getTroubleDetailResponseDto(Trouble trouble, TroubleDto troubleDto, User user) {
+        TroubleDetailResponseDto troubleDetailResponseDto = new TroubleDetailResponseDto(troubleDto);
+        troubleDetailResponseDto.setWriter(trouble.getUser().getNickname());
+        troubleDetailResponseDto.setNickname(user.getNickname());
+        troubleDetailResponseDto.setProfileImages(userService.findUserProfiles(trouble.getUser()));
+        String postTime = convertTimeService.convertLocaldatetimeToTime(trouble.getCreatedAt());
+        troubleDetailResponseDto.setTroubleTime(postTime);
+        troubleDetailResponseDto.setViews(trouble.getViews());
+        trouble.setViews(trouble.getViews()+1);
+        troubleRepository.save(trouble);
+        return troubleDetailResponseDto;
+    }
+
+
+    public List<TroubleAllResponseDto> findAllTroubles(int page) {
+        List<TroubleAllResponseDto> troubleAllResponseDtos = new ArrayList<>();
+        Pageable pageable = PageRequest.of(page-1, 30);
+        Page<Trouble> troubles = troubleRepository.findAllByOrderByCreatedAtDesc(pageable);
+        for (Trouble trouble: troubles) {
+            List<TroubleImage> troubleImages = troubleImageRepository.findAllByTroubleId(trouble.getId());
+            troubleAllResponseDtos.add(new TroubleAllResponseDto(trouble, troubleImages.get(0).getTroubleImage()));
+        }
+        return troubleAllResponseDtos;
+    }
+
+    public List<TroubleAllResponseDto> findViewTroubles(User user) {
+        List<Trouble> troubles = troubleRepository.findAllByAnswerOrderByViewsDesc(user.getGeneration());
         return getTroubles(troubles);
     }
 
-    public List<TroubleAllResponseDto> findViewTroubles() {
-        List<Trouble> troubles = troubleRepository.findAllByOrderByViewsDesc();
-        return getTroubles(troubles);
-    }
-
+    // 고민글 전체 리스트 조회
     public List<TroubleAllResponseDto> getTroubles(List<Trouble> troubles){
         if(troubles.isEmpty()){
             throw new IllegalArgumentException("작성된 고민글이 없습니다.");
@@ -186,16 +228,29 @@ public class TroubleService {
         for(Trouble trouble:troubles){
             TroubleDto troubleDto = findTrouble(trouble.getId());
             TroubleAllResponseDto troubleAllResponseDto = new TroubleAllResponseDto(troubleDto);
-            troubleAllResponseDto.setId(trouble.getId());
-            troubleAllResponseDto.setNickname(trouble.getUser().getNickname());
-            troubleAllResponseDto.setProfileImages(userService.findUserProfiles(trouble.getUser()));
-            String postTime = convertTimeService.convertLocaldatetimeToTime(trouble.getCreatedAt());
-            troubleAllResponseDto.setPostTime(postTime);
+            troubleAllResponseDto.setTroubleId(trouble.getId());
             troubleAllResponseDto.setViews(trouble.getViews());
             List<TroubleComment> troubleComments = troubleCommentRepository.findAllByTroubleId(trouble.getId());
-            troubleAllResponseDto.setCommentCount((long) troubleComments.size());
+//            troubleAllResponseDto.setCommentCount((long) troubleComments.size());
             troubleAllResponseDtos.add(troubleAllResponseDto);
         }
         return troubleAllResponseDtos;
     }
+
+    // 댓글 리스폰스용
+    public TroubleCommentRequestDto getTroubleCommentDto(User user, TroubleComment troubleComment) {
+        TroubleCommentRequestDto troubleCommentRequestDto = new TroubleCommentRequestDto(troubleComment);
+        User commentUser = userRepository.findByNickname(troubleComment.getNickname()).orElseThrow(
+                () -> new IllegalArgumentException("고민댓글에 해당하는 사용자를 찾을 수 없습니다."));
+        troubleCommentRequestDto.setProfileImages(userService.findUserProfiles(commentUser));
+        troubleCommentRequestDto.setCommentLikeCount(troubleComment.getLikeCount());
+        String troubleCommentTime = convertTimeService.convertLocaldatetimeToTime(troubleComment.getCreatedAt());
+        troubleCommentRequestDto.setCommentTime(troubleCommentTime);
+        Long size = (long) troubleCommentRepository.findAllByTroubleId(troubleComment.getTrouble().getId()).size();
+//        troubleCommentRequestDto.setCommentCount(size);
+        TroubleCommentLike savedTroubleCommentLike = troubleCommentLikeRepository.findByTroubleCommentAndUserId(troubleComment, user.getId());
+        troubleCommentRequestDto.setCommentLikeStatus(savedTroubleCommentLike != null);
+        return troubleCommentRequestDto;
+    }
+
 }

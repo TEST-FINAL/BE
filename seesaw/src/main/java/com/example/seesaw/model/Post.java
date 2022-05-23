@@ -20,7 +20,7 @@ public class Post extends Timestamped {
     @Id
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true) // 단어는 중복 x
     private String title;
 
     @Column(nullable = false)
@@ -35,6 +35,9 @@ public class Post extends Timestamped {
     @Column
     private Long scrapCount;
 
+    @Column
+    private String firstWriter; // 첫 글 등록한사람
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     @Column
     private List<PostImage> postImages;
@@ -43,6 +46,10 @@ public class Post extends Timestamped {
     @Column
     private List<PostTag> postTags;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @Column
+    private List<PostComment> postComments;
+
     @ManyToOne
     @JoinColumn(name = "userid")
     private User user;
@@ -50,13 +57,14 @@ public class Post extends Timestamped {
     private Long views = 0L;
 
 
-    public Post(String title, String contents, String videoUrl, String generation, User user, Long scrapCount) {
+    public Post(String title, String contents, String videoUrl, String generation, User user, String firstWriter ,Long scrapCount) {
         this.title = title;
         this.contents = contents;
         this.videoUrl = videoUrl;
         this.generation = generation;
         this.user = user;
         this.scrapCount = scrapCount;
+        this.firstWriter = firstWriter;
     }
 
 

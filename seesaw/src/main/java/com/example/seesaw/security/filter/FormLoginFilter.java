@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class FormLoginFilter extends UsernamePasswordAuthenticationFilter {
+
     final private ObjectMapper objectMapper;
 
     public FormLoginFilter(final AuthenticationManager authenticationManager) {

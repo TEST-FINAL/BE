@@ -21,6 +21,9 @@ public class ChatMessage extends Timestamped {
     @Column
     private String message;
 
+    @Column
+    private String roomId;
+
     @ManyToOne
     @JoinColumn(name = "CHATROOM_ID")
     private ChatRoom chatRoom;

@@ -1,9 +1,6 @@
 package com.example.seesaw.controller;
 
-import com.example.seesaw.dto.MyScrapResponseDto;
-import com.example.seesaw.dto.MyTroublesResponseDto;
-import com.example.seesaw.dto.ProfileRequestDto;
-import com.example.seesaw.dto.UserInfoResponseDto;
+import com.example.seesaw.dto.*;
 import com.example.seesaw.security.UserDetailsImpl;
 import com.example.seesaw.service.TroubleService;
 import com.example.seesaw.service.UserPageService;
@@ -33,13 +30,6 @@ public class UserPageController {
         return ResponseEntity.ok()
                 .body(userInfoResponseDto);
     }
-//    //내가 작성한 고민글 조회
-//    @GetMapping("/api/mypage/trouble")
-//    public ResponseEntity<UserTroubleResponseDto> findTroubles(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-//        UserTroubleResponseDto gominResponseDto = troubleService.findTroubles(userDetails.getUser());
-//        return ResponseEntity.ok()
-//                .body(gominResponseDto);
-//    }
 
     //닉네임, 프로필 이미지 수정
     @PutMapping("/api/mypage/profile")
@@ -53,16 +43,23 @@ public class UserPageController {
     }
 
     // 내가 스크랩한 글 조회
-    @GetMapping("api/mypage/scraps")
+    @GetMapping("/api/mypage/scraps")
     public ResponseEntity<List<MyScrapResponseDto>> getMyScrapPage(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        List<MyScrapResponseDto> myScrapResponseDto = userPageService.getMyScraps(userDetails.getUser());
+        List<MyScrapResponseDto> myScrapResponseDtos = userPageService.getMyScraps(userDetails.getUser());
 
         return ResponseEntity.ok()
-                .body(myScrapResponseDto);
+                .body(myScrapResponseDtos);
     }
+    // 내가 등록한 단어 조회
+    @GetMapping("/api/mypage/posts")
+    public ResponseEntity<List<MyPostResponseDto>> getMyPostPage(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        List<MyPostResponseDto> myPostResponseDtos = userPageService.getMyPosts(userDetails.getUser());
 
+        return ResponseEntity.ok()
+                .body(myPostResponseDtos);
+    }
     // 내가 등록한 고민글 조회
-    @GetMapping("api/mypage/troubles")
+    @GetMapping("/api/mypage/troubles")
     public ResponseEntity<List<MyTroublesResponseDto>> getMyTroublePage(@AuthenticationPrincipal UserDetailsImpl userDetails){
         List<MyTroublesResponseDto> myTroublesResponseDtos = userPageService.getMyTroubles(userDetails.getUser());
 

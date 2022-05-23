@@ -41,6 +41,9 @@ public class Trouble extends Timestamped {
     @OneToMany(mappedBy = "trouble", cascade = CascadeType.REMOVE)
     private List<TroubleTag> troubleTags;
 
+    @OneToMany(mappedBy = "trouble", cascade = CascadeType.REMOVE)
+    private List<TroubleComment> troubleComments;
+
     @ManyToOne
     @JoinColumn(name = "USER_ID", nullable = false)
     private User user;

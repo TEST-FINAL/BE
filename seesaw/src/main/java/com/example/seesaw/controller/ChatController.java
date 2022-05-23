@@ -29,7 +29,7 @@ public class ChatController {
 
         Thread.sleep(100); // simulated delay
 
-        ChatRoom chatRoom;
+        ChatRoom chatRoom = new ChatRoom();
 
         // 채팅방있는지 확인 후 없으면 생성, 있으면 채팅방 변수에 할당해놓음 -> 채팅 저장 시에 사용할 예정
         if(!(chatRoomRepository.findByArea("main").isPresent())) {
@@ -47,7 +47,6 @@ public class ChatController {
 
         String destination = "mainChat 확인용";
         log.info("channel : {}",destination);
-
         // 채팅 유저 수
 //        chatMessageDto.setUserCount(redisChatRepository.getUserCount(destination));
 

@@ -1,11 +1,10 @@
 package com.example.seesaw.dto;
 
+import com.example.seesaw.model.Trouble;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 
 @Setter
 @Getter
@@ -13,18 +12,14 @@ import java.util.List;
 @NoArgsConstructor
 public class TroubleAllResponseDto {
 
-    private Long id;
-    private String nickname;
+    private Long troubleId;
     private String title;
     private String contents;
     private String question;
     private String answer;
-    private String postTime;
     private Long views;
-    private Long commentCount;
-    private List<String> tagNames;
-    private List<String> troubleImages;     // imageUrls -> troubleImages
-    private List<ProfileListDto> profileImages;
+//    private Long commentCount;
+    private String troubleImages;     // imageUrls -> troubleImages
 
 
     public TroubleAllResponseDto(TroubleDto troubleDto) {
@@ -32,7 +27,17 @@ public class TroubleAllResponseDto {
         this.contents = troubleDto.getContents();
         this.question = troubleDto.getQuestion();
         this.answer = troubleDto.getAnswer();
-        this.tagNames = troubleDto.getTagNames();
-        this.troubleImages = troubleDto.getTroubleImages();
+        this.troubleImages = troubleDto.getTroubleImages().get(0);
+    }
+
+    public TroubleAllResponseDto(Trouble trouble, String troubleImages) {
+        this.troubleId = trouble.getId();
+        this.title = trouble.getTitle();
+        this.contents = trouble.getContents();
+        this.question = trouble.getQuestion();
+        this.answer = trouble.getAnswer();
+        this.views = trouble.getViews();
+//        this.commentCount = (long) trouble.getTroubleComments().size();
+        this.troubleImages = troubleImages;
     }
 }

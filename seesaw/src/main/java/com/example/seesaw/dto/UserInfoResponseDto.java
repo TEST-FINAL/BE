@@ -15,6 +15,9 @@ public class UserInfoResponseDto {
 
     private String username;
     private String nickname;
+    private String mbti;
+    private String generation;
     private List<ProfileListDto> ProfileImages;
+
 
 }

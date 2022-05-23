@@ -14,7 +14,7 @@ import java.util.List;
 public class SignupRequestDto {
 
     private String username;
-    private String pwd;
+    private String id;
     private String nickname;
     private String generation;
     private String energy;
