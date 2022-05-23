@@ -1,16 +1,16 @@
 package com.example.seesaw.service;
 
 import com.example.seesaw.dto.KakaoGenerationDto;
+import com.example.seesaw.dto.KakaoUserInfoDto;
+import com.example.seesaw.model.User;
+import com.example.seesaw.model.UserRoleEnum;
+import com.example.seesaw.repository.UserRepository;
 import com.example.seesaw.security.UserDetailsImpl;
 import com.example.seesaw.security.UserDetailsServiceImpl;
 import com.example.seesaw.security.jwt.JwtTokenUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.example.seesaw.dto.KakaoUserInfoDto;
-import com.example.seesaw.model.User;
-import com.example.seesaw.model.UserRoleEnum;
-import com.example.seesaw.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -155,7 +155,7 @@ public class KakaoUserService {
         System.out.println("kakaoUserDetails : " + kakaoUserDetails.toString());
 
         final String accessToken = JwtTokenUtils.generateJwtToken(kakaoUserDetails.getUser());
-        final String refreshtoken = userDetailsServiceImpl.saveRefershToken(kakaoUserDetails.getUser());
+        final String refreshtoken = userDetailsServiceImpl.saveRefreshToken(kakaoUserDetails.getUser());
 
         List<String> tokens = new ArrayList<>();
         tokens.add(accessToken);

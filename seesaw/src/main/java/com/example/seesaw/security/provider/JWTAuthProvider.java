@@ -1,10 +1,10 @@
 package com.example.seesaw.security.provider;
 
+import com.example.seesaw.model.User;
+import com.example.seesaw.repository.UserRepository;
 import com.example.seesaw.security.UserDetailsImpl;
 import com.example.seesaw.security.jwt.JwtDecoder;
 import com.example.seesaw.security.jwt.JwtPreProcessingToken;
-import com.example.seesaw.model.User;
-import com.example.seesaw.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

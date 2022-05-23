@@ -44,7 +44,7 @@ public class User {
     @Column(unique = true)
     private Long kakaoId;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<UserProfileNum> userProfileNum;
 
 

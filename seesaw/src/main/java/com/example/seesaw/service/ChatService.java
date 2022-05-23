@@ -39,31 +39,36 @@ public class ChatService {
 
     // 채팅 메세지
     public void chatSave(ChatMessageDto chatMessageDto, String token ,ChatRoom chatRoom) {
-//        String username = "";
+        String username = "";
 
         // 토큰 추출
-        if (!(String.valueOf(token).equals("Authorization"))) {
+        if (!(String.valueOf(token).equals("Authorization")||String.valueOf(token).equals("null"))) {
             log.info("token : {}",String.valueOf(token));
             String tokenInfo = token.substring(7); // Bearer빼고
-//            username = jwtDecoder.decodeUsername(tokenInfo);
+            username = jwtDecoder.decodeUsername(tokenInfo);
         }
 
         if(chatMessageDto.getStatus().equals("JOIN")) {
-//            if(username!=""&&username!="null"){
+            if(username!=""&&username!="null"){
                 log.info("JOIN일때 {}",chatMessageDto.getSenderName());
                 chatMessageDto.setMessage(chatMessageDto.getSenderName()+"님이 입장하셨습니다");
-//            }
+            }
 
         }else if (chatMessageDto.getStatus().equals("OUT")) {
-//            if(username!=""&&username!="null") {
+            if(username!=""&&username!="null") {
                 log.info("OUT일때 {}", chatMessageDto.getSenderName());
                 chatMessageDto.setMessage(chatMessageDto.getSenderName() + "님이 퇴장하셨습니다");
-//            }
+            }
         } else {
+
+//            log.info("비속어 필터링 전 채팅 : {}",chatMessageDto.getMessage());
+//            // 비속어 필터링 메소드
+//            chatFilter(chatMessageDto);
+//            log.info("비속어 필터링 후 채팅 : {}",chatMessageDto.getMessage());
+
             //채팅 메시지 저장
             ChatMessage chatMessage = new ChatMessage(chatMessageDto, chatRoom);
             chatMessageRepository.save(chatMessage);
-
         }
     }
 }

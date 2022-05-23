@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @AllArgsConstructor
+//부모클래스
 public class ChatMessageResponseDto {
 
     private String senderName;

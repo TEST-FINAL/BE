@@ -1,11 +1,14 @@
 package com.example.seesaw.security.jwt;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.NoSuchElementException;
 
 @Component
+@RequiredArgsConstructor
 public class HeaderTokenExtractor {
 
     /*

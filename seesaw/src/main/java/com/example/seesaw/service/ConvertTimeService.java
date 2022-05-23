@@ -24,7 +24,11 @@ public class ConvertTimeService {
 
         String msg = null;
         if (diffTime < SEC){
-            return diffTime + "초전";
+            if (diffTime < 0) {
+                return "1초전";
+            } else {
+                return diffTime + "초전";
+            }
         }
 
         diffTime = diffTime / SEC;

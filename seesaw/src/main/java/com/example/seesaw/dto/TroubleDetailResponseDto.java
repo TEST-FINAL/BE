@@ -13,13 +13,13 @@ import java.util.List;
 @NoArgsConstructor
 public class TroubleDetailResponseDto {
 
-    private String nickname;
-
+    private String nickname; // 본인 닉네임.
+    private String writer; // 글작성자 이
     private String title;
     private String contents;
     private String question;
     private String answer;
-    private String postTime;
+    private String troubleTime;
     private Long views;
     private Long commentCount;
     private List<String> tagNames;          // tagName -> tagNames
