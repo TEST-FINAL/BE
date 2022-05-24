@@ -96,7 +96,7 @@ public class PostS3Service {
         }
 
         for (String lastImage : lastImages) {
-            if (!lastImage.equals("")) {
+            if (!lastImage.equals("https://myseesaw.s3.ap-northeast-2.amazonaws.com/DictBasicCard.svg")) {
                 String image = lastImage.replace("https://myseesaw.s3.ap-northeast-2.amazonaws.com/", "");
                 boolean isExistObject = s3Client.doesObjectExist(bucket, image);
                 System.out.println("지워야할 url 주소 : " + image);

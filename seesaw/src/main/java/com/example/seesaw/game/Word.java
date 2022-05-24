@@ -11,7 +11,7 @@ public class Word {
     private Direction direction;
 
     /** the name of the word **/
-    private String name;
+    private String name; //static 으로 바꿔
 
     /** the clue for the word **/
     private String clue;

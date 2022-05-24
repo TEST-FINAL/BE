@@ -1,7 +1,6 @@
-package com.example.seesaw.controller;
+package com.example.seesaw.game;
 
 import com.example.seesaw.dto.CrossWordResponseDto;
-import com.example.seesaw.service.CrosswordService;
 import com.example.seesaw.service.MockupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,13 +26,13 @@ public class CrosswordController {
     }
 
     // 목업용 api
-    @GetMapping("/api/mockup/crossword")
-    public ResponseEntity<List<CrossWordResponseDto>> mockup() {
-        List<CrossWordResponseDto> crossWordResponseDtos = mockupService.getWord();
-
-        return ResponseEntity.ok()
-                .body(crossWordResponseDtos);
-    }
+//    @GetMapping("/api/mockup/crossword")
+//    public ResponseEntity<List<CrossWordResponseDto>> mockup() {
+//        List<CrossWordResponseDto> crossWordResponseDtos = mockupService.getWord();
+//
+//        return ResponseEntity.ok()
+//                .body(crossWordResponseDtos);
+//    }
 
 //    // 단어 답 확인용 api
 //    @PostMapping("api/crossword/check")

@@ -25,16 +25,16 @@ public class User {
     @Column(nullable = false)
     private String pwd;
 
-    @Column(nullable = false, unique = true)
+    @Column
     private String nickname;
 
-    @Column(nullable = false)
+    @Column
     private String generation;
 
     @Column
     private Long postCount;
 
-    @Column(nullable = false)
+    @Column
     private String mbti;
 
     @Column(nullable = false)
@@ -60,12 +60,15 @@ public class User {
     }
 
 
-    public User(String username, String enPassword, Long postCount, UserRoleEnum role, Long kakaoId) {
+    public User(String username, String enPassword, Long postCount, UserRoleEnum role, Long kakaoId, String mbti, String nickname, String generation) {
         this.username = username;
         this.pwd = enPassword;
         this.postCount = postCount;
         this.role = role;
         this.kakaoId = kakaoId;
+        this.mbti = mbti;
+        this.nickname = nickname;
+        this.generation = generation;
     }
 
 

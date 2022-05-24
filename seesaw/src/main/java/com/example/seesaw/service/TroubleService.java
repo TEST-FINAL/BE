@@ -1,9 +1,6 @@
 package com.example.seesaw.service;
 
-import com.example.seesaw.dto.TroubleAllResponseDto;
-import com.example.seesaw.dto.TroubleCommentRequestDto;
-import com.example.seesaw.dto.TroubleDetailResponseDto;
-import com.example.seesaw.dto.TroubleDto;
+import com.example.seesaw.dto.*;
 import com.example.seesaw.model.*;
 import com.example.seesaw.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -111,7 +108,7 @@ public class TroubleService {
 
         List<String> imagePaths = new ArrayList<>();
         if(files == null && troubleDto.getTroubleImages().isEmpty()){
-            imagePaths.add("https://myseesaw.s3.ap-northeast-2.amazonaws.com/ddddd23sdfasf.jpg");
+            imagePaths.add("https://myseesaw.s3.ap-northeast-2.amazonaws.com/TroubleBaicCard.svg");
             troubleS3Service.delete(troubleId, troubleDto.getTroubleImages());
             troubleImageRepository.deleteAllByTroubleId(troubleId);
         } else if(files!=null) {

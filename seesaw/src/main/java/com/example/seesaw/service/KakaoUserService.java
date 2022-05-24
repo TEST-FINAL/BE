@@ -137,7 +137,7 @@ public class KakaoUserService {
             String encodedPassword = passwordEncoder.encode(password);
 
 
-            kakaoUser = new User(kakaoUsername, encodedPassword, 0L, UserRoleEnum.USER, kakaoId);
+            kakaoUser = new User(kakaoUsername, encodedPassword, 0L, UserRoleEnum.USER, kakaoId, "ENFJ", "동그리동동", "X세대");
             userRepository.save(kakaoUser);
         }
         return kakaoUser;

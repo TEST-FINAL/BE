@@ -1,15 +1,17 @@
 package com.example.seesaw.game;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Objects;
+import com.example.seesaw.dto.CrossWordResponseDto;
+import com.example.seesaw.model.Crossword;
+import com.example.seesaw.model.QuizNum;
+import com.example.seesaw.repository.CrosswordRepository;
+import com.example.seesaw.repository.QuizNumRepository;
+
+import java.util.*;
 
 public class Board {
-    /** the board's dimension **/
+    // 차원 정하는 변수 dimension
     private int dim;
-
-    /** the words added on the board **/
+    // 게임판 단어 추가할 비어있는 List
     private ArrayList<Word> wordsOnBoard = new ArrayList<>();
 
     /** the number of words added for each direction **/
@@ -43,31 +45,17 @@ public class Board {
     /** have words been assigned numbers? **/
     private boolean numsSet = false;
 
+    //repositoru
+    private final CrosswordRepository crosswordRepository;
+    private final QuizNumRepository quizNumRepository;
 
     /** make a new board **/
-    public Board(int dim) {
+    public Board(int dim, CrosswordRepository crosswordRepository, QuizNumRepository quizNumRepository) {
         this.dim = dim;
         this.fullBoard = new String[dim][dim];
         this.partialBoard = new String[dim][dim];
-    }
-
-    /** prints the solved board to the console flipped on the x-axis **/
-    public void printSolution() {
-        String output = "";
-        String nullChar = "-";
-        for (int y=0; y<dim; y++) {
-            for (int x=0; x<dim; x++) {
-                if (fullBoard[x][y] == null) {
-                    output += (nullChar);
-                } else {
-                    output += fullBoard[x][y];
-                }
-                output += " ";
-            }
-            output += "\n";
-        }
-        System.out.print(output + "\n");
-        printClues(true);
+        this.crosswordRepository = crosswordRepository;
+        this.quizNumRepository = quizNumRepository;
     }
 
     /** returns true iff all of the words have been placed **/
@@ -138,7 +126,8 @@ public class Board {
             output += "\n";
         }
         System.out.println(output);
-        printClues(false);
+        //출력
+        printClues();
     }
 
     /** returns the found letter at a given position, ot null if there is no found letter there **/
@@ -159,51 +148,13 @@ public class Board {
     }
 
     /** prints the words' numbers and their clues **/
-    public void printClues(boolean withSols) {
-        String output = "DOWN\n";
+    public List<CrossWordResponseDto> printClues() {
+        List<CrossWordResponseDto> crossWordResponseDtos = new ArrayList<>();
+        int id = 0;
         for (Word word : wordsOnBoard) {
-            if (word.getDirection() == Direction.UP) {
-                output += word.getNum() + ": ";
-                if (foundWords.contains(word)) {
-                    output += "[FOUND] ";
-                }
-                output += word.getClue() + " (" + word.getName().length() + ")";
-                if (withSols) {
-                    output += " | Answer: " + word.getName().toUpperCase();
-                }
-                output += "\n";
-            }
+            crossWordResponseDtos.add(new CrossWordResponseDto(id++, word, false));
         }
-
-        output += "\nACROSS\n";
-        for (Word word : wordsOnBoard) {
-            if (word.getDirection() == Direction.RIGHT) {
-                output += word.getNum() + ": ";
-                if (foundWords.contains(word)) {
-                    output += "[FOUND] ";
-                }
-                output += word.getClue() + " (" + word.getName().length() + ")";
-                if (withSols) {
-                    output += " | Answer: " + word.getName().toUpperCase();
-                }
-                output += "\n";
-            }
-        }
-        System.out.println(output);
-    }
-
-    /** returns true iff a guessed word is correct **/
-    public boolean guessWord(String guess) {
-        for (Word word : wordsOnBoard) {
-            if (word.getName().equalsIgnoreCase(guess.replace(" ", ""))) {
-                foundWords.add(word);
-                for (int c=0; c<word.getName().length(); c++) {
-                    partialBoard[word.getXTrail()[c]][word.getYTrail()[c]] = word.getName().charAt(c) + " ";
-                }
-                return true;
-            }
-        }
-        return false;
+        return crossWordResponseDtos;
     }
 
     /** assigned each word a number **/
@@ -221,10 +172,6 @@ public class Board {
             } else {
                 otherDirection = Direction.UP;
             }
-//            if (numsAtCoords.containsKey(otherDirection.name().charAt(0) + currentCoords)) {
-//                word.setNum(numsAtCoords.get(otherDirection.name().charAt(0) + currentCoords));
-//                continue;
-//            }
 
             if (word.getDirection() == Direction.UP) {
                 word.setNum(upOn);

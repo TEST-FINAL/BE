@@ -1,9 +1,7 @@
 package com.example.seesaw.service;
 
 import com.example.seesaw.dto.TroubleCommentRequestDto;
-import com.example.seesaw.model.Trouble;
-import com.example.seesaw.model.TroubleComment;
-import com.example.seesaw.model.User;
+import com.example.seesaw.model.*;
 import com.example.seesaw.repository.TroubleCommentLikeRepository;
 import com.example.seesaw.repository.TroubleCommentRepository;
 import com.example.seesaw.repository.TroubleRepository;

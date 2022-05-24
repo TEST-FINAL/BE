@@ -1,5 +1,6 @@
 package com.example.seesaw.model;
 
+import com.example.seesaw.game.Word;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -43,6 +44,16 @@ public class Crossword {
         this.contents = contents;
         this.wordCount = wordCount;
         this.isOriental = isOriental;
+    }
+
+    public Crossword (Word word, QuizNum quizNum){
+        this.x = word.getX();
+        this.y = word.getY();
+        this.word = word.getName();
+        this.contents = word.getClue();
+        this.wordCount = word.getName().length();
+        this.isOriental = word.getDirection().toString().equals("RIGHT");
+        this.quizNum = quizNum;
     }
 
 }
