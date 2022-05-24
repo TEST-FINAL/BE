@@ -5,6 +5,7 @@ import com.example.seesaw.dto.TroubleDetailResponseDto;
 import com.example.seesaw.dto.TroubleDto;
 import com.example.seesaw.repository.TroubleRepository;
 import com.example.seesaw.security.UserDetailsImpl;
+import com.example.seesaw.service.TroubleCommentLikeService;
 import com.example.seesaw.service.TroubleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

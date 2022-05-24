@@ -14,7 +14,7 @@ public enum ErrorCode {
     BLANK_USER_NICKNAME(HttpStatus.BAD_REQUEST, "400_3", "닉네임은 필수 입력값입니다."),
     INVALID_PATTERN_USER_NICKNAME(HttpStatus.BAD_REQUEST, "400_4", "닉네임을 2자~8자로 입력해주세요."),
     BLANK_USER_PW(HttpStatus.BAD_REQUEST, "400_5", "비밀번호는 필수 입력값입니다."),
-    INVALID_PATTERN_USER_PW(HttpStatus.BAD_REQUEST, "400_6", "비밀번호는 영문 대소문자,숫자,특수문자를 사용하여 8~20자로 입력해주세요."),
+    INVALID_PATTERN_USER_PW(HttpStatus.BAD_REQUEST, "400_6", "비밀번호는 영문,숫자를 사용하여 6~20자로 입력해주세요."),
     BLANK_USER_PW_CHECK(HttpStatus.BAD_REQUEST, "400_7", "비밀번호 확인은 필수 입력값입니다."),
     NOT_EQUAL_USER_PW_CHECK(HttpStatus.BAD_REQUEST, "400_8", "비밀번호와 비밀번호 확인이 일치하지 않습니다."),
     NOT_EQUAL_USER_PW(HttpStatus.BAD_REQUEST, "400_11", "비밀번호를 확인해주세요."),

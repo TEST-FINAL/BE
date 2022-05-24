@@ -17,12 +17,12 @@ import javax.persistence.Id;
 public class Mbti {
 
     @Id
-    @Column(nullable = false, unique = true)
+    @Column
     private Long id;
 
-    @Column(nullable = false)
+    @Column
     private String mbtiName;
 
-    @Column(nullable = false)
+    @Column
     private String detail;
 }

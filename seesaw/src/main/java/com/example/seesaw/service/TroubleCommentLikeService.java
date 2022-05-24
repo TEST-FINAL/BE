@@ -4,8 +4,8 @@ import com.example.seesaw.dto.TroubleCommentRequestDto;
 import com.example.seesaw.model.TroubleComment;
 import com.example.seesaw.model.TroubleCommentLike;
 import com.example.seesaw.model.User;
-import com.example.seesaw.repository.TroubleCommentLikeRepository;
 import com.example.seesaw.repository.TroubleCommentRepository;
+import com.example.seesaw.repository.TroubleCommentLikeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
