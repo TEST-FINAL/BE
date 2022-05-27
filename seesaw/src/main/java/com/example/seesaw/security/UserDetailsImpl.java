@@ -1,6 +1,6 @@
 package com.example.seesaw.security;
 
-import com.example.seesaw.model.User;
+import com.example.seesaw.user.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

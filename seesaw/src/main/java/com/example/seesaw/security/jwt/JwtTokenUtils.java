@@ -2,15 +2,9 @@ package com.example.seesaw.security.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.example.seesaw.dto.UserInfoResponseDto;
-import com.example.seesaw.model.User;
-import com.example.seesaw.model.UserProfile;
-import com.example.seesaw.model.UserProfileNum;
-import lombok.ToString;
+import com.example.seesaw.user.model.User;
 
-import javax.transaction.Transactional;
 import java.util.Date;
-import java.util.List;
 
 public final class JwtTokenUtils {
 
@@ -27,7 +21,7 @@ public final class JwtTokenUtils {
     // JWT 토큰의 유효기간: 7일 (단위: seconds)
     private static final int REFRESH_TOKEN_VALID_SEC = 7 * DAY;
     // JWT 토큰의 유효기간: 7일 (단위: milliseconds)
-    private static final int REFRESH_TOKEN_VALID_MILLI_SEC =  5000;
+    private static final int REFRESH_TOKEN_VALID_MILLI_SEC = REFRESH_TOKEN_VALID_SEC * 1000;
 
     public static final String CLAIM_EXPIRED_DATE = "EXPIRED_DATE";
     public static final String CLAIM_USER_NAME = "USER_NAME";

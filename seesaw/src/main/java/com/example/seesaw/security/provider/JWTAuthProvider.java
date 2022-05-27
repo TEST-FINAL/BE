@@ -1,7 +1,7 @@
 package com.example.seesaw.security.provider;
 
-import com.example.seesaw.model.User;
-import com.example.seesaw.repository.UserRepository;
+import com.example.seesaw.user.model.User;
+import com.example.seesaw.user.repository.UserRepository;
 import com.example.seesaw.security.UserDetailsImpl;
 import com.example.seesaw.security.jwt.JwtDecoder;
 import com.example.seesaw.security.jwt.JwtPreProcessingToken;
