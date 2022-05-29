@@ -12,42 +12,42 @@ public class Board {
     // 게임판 단어 추가할 비어있는 List
     private ArrayList<Word> wordsOnBoard = new ArrayList<>();
 
-    /** the number of words added for each direction **/
+    // 각 방향에 대한 추가된 단어 수
     private int upWords = 0;
     private int rightWords = 0;
 
-    /** the max number of words for each direction **/
+    // 각 방향에 대한 최대 단어 수
     public final int maxPerDirection = 9;
 
-    /** the the coordinates of all numbers of words **/
-    private HashMap<String, Integer> numsAtCoords = new HashMap<>();
+    // 모든 단어들의 좌표
+//    private HashMap<String, Integer> numsAtCoords = new HashMap<>();
 
-    /** the words the player has found **/
-     private ArrayList<Word> foundWords = new ArrayList<>();
+    // 플레이어가 찾은 단어
+//    private ArrayList<Word> foundWords = new ArrayList<>();
 
-    /** the coordinates of every placed letter on the board: <letter, list of coordinates> **/
+    // 게임판에 배치된 모든 문자 좌표 <letter, list of coordinates>
     private HashMap<String, ArrayList<String>> letterPositions = new HashMap<>();
 
-    /** the completed board **/
+    // 완성된 게임판
     private String[][] fullBoard;
 
-    /** the words currently found on the board **/
+    // 현재 게임판에 있는 단어
     private String[][] partialBoard;
 
-    /** the representation of an empty square **/
-    private final String emptySquare = "-";
+    // 빈 게임판
+//    private final String emptySquare = "-";
 
-    /** the representation of an unvolved square **/
-    private final String unsolvedSquare = "?";
+    // 아직 게임 시작 전 사각형
+//    private final String unsolvedSquare = "?";
 
-    /** have words been assigned numbers? **/
-    private boolean numsSet = false;
+    // 단어에 숫자가 할당?
+//    private boolean numsSet = false;
 
     //repositoru
     private final CrosswordRepository crosswordRepository;
     private final QuizNumRepository quizNumRepository;
 
-    /** make a new board **/
+    // 게임판 만들 생성자
     public Board(int dim, CrosswordRepository crosswordRepository, QuizNumRepository quizNumRepository) {
         this.dim = dim;
         this.fullBoard = new String[dim][dim];
@@ -56,7 +56,7 @@ public class Board {
         this.quizNumRepository = quizNumRepository;
     }
 
-    /** returns true iff all of the words have been placed **/
+    // 모든 단어가 배치될경우 true로 리턴.
     public boolean allWordsPlaced() {
         if (numOfPlacedWords() == (maxPerDirection * (Direction.values().length))) {
             return true;
@@ -67,85 +67,85 @@ public class Board {
         return false;
     }
 
-    /** returns true iff all words all words has been found **/
-    public boolean allWordsFound() {
-        if (foundWords.size() == wordsOnBoard.size()) {
-            return true;
-        }
-        return false;
-    }
+    // 단어 다 찾으면 true로 리턴  (사용 x)
+//    public boolean allWordsFound() {
+//        if (foundWords.size() == wordsOnBoard.size()) {
+//            return true;
+//        }
+//        return false;
+//    }
 
-    /** prints the board with the player's current progress **/
-    public void printProgress() {
-        if (!numsSet) {
-            setNums();
-            numsSet = true;
-        }
+    // 유저의 현재 진행상황을 출력
+//    public void printProgress() {
+//        if (!numsSet) {
+//            setNums();
+//            numsSet = true;
+//        }
+//
+//        String currentPos;
+//        for (int y=0; y<dim; y++) {
+//            for (int x=0; x < dim; x++) {
+//                currentPos = x + " " + y;
+//                if (fullBoard[x][y] == null) {
+//                    partialBoard[x][y] = emptySquare;
+//                } else {
+//                    if (getFoundWordLetter(currentPos) == null) {
+//                        partialBoard[x][y] = unsolvedSquare;
+//                    } else {
+//                        partialBoard[x][y] = getFoundWordLetter(currentPos);
+//                    }
+//                }
+//            }
+//        }
+//
+//
+//        String output = "";
+//        for (int y=0; y<dim; y++) {
+//            for (int x=0; x<dim; x++) {
+//                currentPos = x + " " + y;
+//                if (partialBoard[x][y] == null) {
+//                    output += emptySquare + " ";
+//                    continue;
+//                }
+//
+//                if (partialBoard[x][y].equals(unsolvedSquare)) {
+//                    if (numsAtCoords.containsKey(Direction.UP.name().charAt(0) + currentPos)) {
+//                        output += numsAtCoords.get(Direction.UP.name().charAt(0) + currentPos) + " ";
+//                    } else if (numsAtCoords.containsKey(Direction.RIGHT.name().charAt(0) + currentPos)) {
+//                        output += numsAtCoords.get(Direction.RIGHT.name().charAt(0) + currentPos) + " ";
+//                    } else {
+//                        output += unsolvedSquare + " ";
+//                    }
+//                    continue;
+//                }
+//                // partialBoard[x][y] must contain part of a found word
+//                output += partialBoard[x][y] + " ";
+//            }
+//            output += "\n";
+//        }
+//        System.out.println(output);
+//        //출력
+//        printClues();
+//    }
 
-        String currentPos;
-        for (int y=0; y<dim; y++) {
-            for (int x=0; x < dim; x++) {
-                currentPos = x + " " + y;
-                if (fullBoard[x][y] == null) {
-                    partialBoard[x][y] = emptySquare;
-                } else {
-                    if (getFoundWordLetter(currentPos) == null) {
-                        partialBoard[x][y] = unsolvedSquare;
-                    } else {
-                        partialBoard[x][y] = getFoundWordLetter(currentPos);
-                    }
-                }
-            }
-        }
+    // 주어진 위치에서 발견된 문자를 반환하고 발견된 문자가 없으면 null 리턴
+//    private String getFoundWordLetter(String position) {
+//        int [] currentXTrail;
+//        int [] currentYTrail;
+//        for (Word word : foundWords) {
+//            currentXTrail = word.getXTrail();
+//            currentYTrail = word.getYTrail();
+//
+//            for (int i=0; i<currentXTrail.length; i++) {
+//                if (position.equals(currentXTrail[i] + " " + currentYTrail[i])) {
+//                    return "" + word.getName().charAt(i);
+//                }
+//            }
+//        }
+//        return null;
+//    }
 
-
-        String output = "";
-        for (int y=0; y<dim; y++) {
-            for (int x=0; x<dim; x++) {
-                currentPos = x + " " + y;
-                if (partialBoard[x][y] == null) {
-                    output += emptySquare + " ";
-                    continue;
-                }
-
-                if (partialBoard[x][y].equals(unsolvedSquare)) {
-                    if (numsAtCoords.containsKey(Direction.UP.name().charAt(0) + currentPos)) {
-                        output += numsAtCoords.get(Direction.UP.name().charAt(0) + currentPos) + " ";
-                    } else if (numsAtCoords.containsKey(Direction.RIGHT.name().charAt(0) + currentPos)) {
-                        output += numsAtCoords.get(Direction.RIGHT.name().charAt(0) + currentPos) + " ";
-                    } else {
-                        output += unsolvedSquare + " ";
-                    }
-                    continue;
-                }
-                // partialBoard[x][y] must contain part of a found word
-                output += partialBoard[x][y] + " ";
-            }
-            output += "\n";
-        }
-        System.out.println(output);
-        //출력
-        printClues();
-    }
-
-    /** returns the found letter at a given position, ot null if there is no found letter there **/
-    private String getFoundWordLetter(String position) {
-        int [] currentXTrail;
-        int [] currentYTrail;
-        for (Word word : foundWords) {
-            currentXTrail = word.getXTrail();
-            currentYTrail = word.getYTrail();
-
-            for (int i=0; i<currentXTrail.length; i++) {
-                if (position.equals(currentXTrail[i] + " " + currentYTrail[i])) {
-                    return "" + word.getName().charAt(i);
-                }
-            }
-        }
-        return null;
-    }
-
-    /** prints the words' numbers and their clues **/
+    // 계산된 값들 response
     public List<CrossWordResponseDto> printClues() {
         List<CrossWordResponseDto> crossWordResponseDtos = new ArrayList<>();
         int id = 0;
@@ -155,41 +155,41 @@ public class Board {
         return crossWordResponseDtos;
     }
 
-    /** assigned each word a number **/
-    public void setNums() {
-        int upOn = 1;
-        int rightOn = 1;
-        String currentCoords;
-        Direction otherDirection;
+    // 각 단어의 숫자를 할당
+//    public void setNums() {
+//        int upOn = 1;
+//        int rightOn = 1;
+//        String currentCoords;
+//        Direction otherDirection;
+//
+//        for (Word word : wordsOnBoard) {
+//            currentCoords = word.getPosition();
+//
+//            if (word.getDirection() == Direction.UP) {
+//                otherDirection = Direction.RIGHT;
+//            } else {
+//                otherDirection = Direction.UP;
+//            }
+//
+//            if (word.getDirection() == Direction.UP) {
+//                word.setNum(upOn);
+//                numsAtCoords.put(Direction.UP.name().charAt(0) + word.getPosition(), upOn);
+//                upOn++;
+//                continue;
+//            }
+//
+//            if (word.getDirection() == Direction.RIGHT) {
+//                word.setNum(rightOn);
+//                numsAtCoords.put(Direction.RIGHT.name().charAt(0) + word.getPosition(), rightOn);
+//                rightOn++;
+//                continue;
+//            }
+//
+//            throw new IllegalArgumentException("Direction is invalid");
+//        }
+//    }
 
-        for (Word word : wordsOnBoard) {
-            currentCoords = word.getPosition();
-
-            if (word.getDirection() == Direction.UP) {
-                otherDirection = Direction.RIGHT;
-            } else {
-                otherDirection = Direction.UP;
-            }
-
-            if (word.getDirection() == Direction.UP) {
-                word.setNum(upOn);
-                numsAtCoords.put(Direction.UP.name().charAt(0) + word.getPosition(), upOn);
-                upOn++;
-                continue;
-            }
-
-            if (word.getDirection() == Direction.RIGHT) {
-                word.setNum(rightOn);
-                numsAtCoords.put(Direction.RIGHT.name().charAt(0) + word.getPosition(), rightOn);
-                rightOn++;
-                continue;
-            }
-
-            throw new IllegalArgumentException("Direction is invalid");
-        }
-    }
-
-    /** tries to add a word to the board, returning true iff successful **/
+    // 게임판에 단어를 추가한다, 성공하면 true를 리턴
     public boolean tryAddWord(String givenWord) {
         Word word = new Word(givenWord);
         if ((rightWords>=maxPerDirection) && (upWords>=maxPerDirection)) {
@@ -233,7 +233,7 @@ public class Board {
         return false;
     }
 
-    /** adds a word to the board **/
+    // 게임판에 단어 추가 메서드
     private void addWord(Word word, String position, Direction direction) {
         word.setPosition(position);
         word.setDirection(direction);
@@ -257,7 +257,7 @@ public class Board {
         }
     }
 
-    /** adjusts a position to place specified letter on specified position **/
+    // 지정된 위치에 지정된 문자를 배치하도록 위치 조정 메서드
     private String adjustPosition(String originalPos, Direction direction, int charOn) {
         int x = Utils.getX(originalPos);
         int y = Utils.getY(originalPos);
@@ -268,10 +268,10 @@ public class Board {
 
             return (x-charOn) + " " + y;
         }
-        throw new IllegalArgumentException("The given direction was: " + direction);
+        throw new IllegalArgumentException("현재 주어진 방향은 : " + direction);
     }
 
-    /** updates the letter positions hashmap with a new word **/
+    // 새 단어로 문자 위치를 업데이트
     private void updateLetterPositions(Word word) {
         Objects.requireNonNull(word.getPosition());
         Objects.requireNonNull(word.getDirection());
@@ -294,7 +294,7 @@ public class Board {
         }
     }
 
-    /** checks if a word can possible be placed at given position on the board **/
+    // 단어가 게임판의 지정된 위치에 배치될 수 있는지 확인.
     private boolean tightCanAdd(Word word, String position, Direction direction) {
         int currentX = Utils.getX(position);
         int currentY = Utils.getY(position);
@@ -325,7 +325,7 @@ public class Board {
         return true;
     }
 
-    /** checks if a word can be added such that words are well spaced **/
+    // 단어 간격이 잘 맞도록 단어를 추가할 수 있는지 확인.
     private boolean spacedCanAdd(Word word, String position, Direction direction) {
         if (!tightCanAdd(word, position, direction)) {
             return false;
@@ -400,7 +400,7 @@ public class Board {
         return true;
     }
 
-    /** returns the number of words on the board **/
+    // 게임판 단어 수 리턴
     public int numOfPlacedWords() {
         assert ((upWords + rightWords) == wordsOnBoard.size());
         return wordsOnBoard.size();

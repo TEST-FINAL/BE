@@ -205,7 +205,7 @@ public class TroubleService {
         return troubleDetailResponseDto;
     }
 
-
+    // 전체 리스트
     public List<TroubleAllResponseDto> findAllTroubles(int page) {
         List<TroubleAllResponseDto> troubleAllResponseDtos = new ArrayList<>();
         Pageable pageable = PageRequest.of(page-1, 30);
